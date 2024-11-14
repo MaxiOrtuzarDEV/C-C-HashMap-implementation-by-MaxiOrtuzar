@@ -1,3 +1,18 @@
+/*
+* Universidad de La Frontera
+* Ingeniería Civil Electrónica/Telemática
+*
+* IIE-344 ESTRUCTURA DE DATOS Y ALGORITMOS
+*
+* Tarea 2
+*
+* Autor 1: Maximiliano Ortuzar
+* Autor 2: Benjamin Fuentes
+*
+* Fecha: 14-13-2024
+*
+* Descripción general del programa: Implementacion de hashmap en c/c++
+*/
 
 #ifndef HASHMAP_H
 #define HASHMAP_H
