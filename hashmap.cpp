@@ -1,23 +1,64 @@
+/*
+* Universidad de La Frontera
+* Ingeniería Civil Electrónica/Telemática
+*
+* IIE-344 ESTRUCTURA DE DATOS Y ALGORITMOS
+*
+* Tarea 2
+*
+* Autor 1: Maximiliano Ortuzar
+* Autor 2: Benjamin Fuentes
+*
+* Fecha: 14-13-2024
+*
+* Descripción general del programa: Implementacion de hashmap en c/c++
+*/
 
 
+//Llamada al head
 #include "hashmap.h"
+
+//Librerias estandar usadas
 #include <iostream>
 #include <ostream>
 #include <sstream>
 
-//Set de Nodo
+/*
+* Nombre de la función: set.
+* Tipo de función: void.
+* Parámetros: “value” de tipo int.
+* “key” de tipo const std::string &.
+* Dato de retorno: No tiene retorno.
+* Descripción de la función: La función set() asigna un valor y una clave a un nodo.
+*/
 void NODO_HM::set(const int value, const std::string &key) {
     this->value = value;
     this->key = key;
 }
 
+/*
+* Nombre de la función: isEmpty.
+* Tipo de función: bool.
+* Parámetros: No recibe parámetros.
+* Dato de retorno: true si el nodo está vacío, false en caso contrario.
+* Descripción de la función: La función isEmpty() verifica si un nodo está vacío
+* evaluando si la clave del nodo es una cadena vacía.
+*/
 bool NODO_HM::isEmpty() const {
 
     return key.empty();  // Si la clave está vacía, el nodo se considera vacío
 
 }
 
-//Imprimir clave/valor Nodo
+
+/*
+* Nombre de la función: printNodo.
+* Tipo de función: void.
+* Parámetros: No recibe parámetros.
+* Dato de retorno: No tiene retorno.
+* Descripción de la función: La función printNodo() imprime la clave y el valor del
+* nodo si no está vacío, o indica que está vacío.
+*/
 void NODO_HM::printNodo() const {
 
     if (this->isEmpty()==true) {
@@ -29,6 +70,14 @@ void NODO_HM::printNodo() const {
 
 }
 
+/*
+* Nombre de la función: emptyNodo.
+* Tipo de función: void.
+* Parámetros: No recibe parámetros.
+* Dato de retorno: No tiene retorno.
+* Descripción de la función: La función emptyNodo() limpia el contenido del nodo,
+* eliminando la clave y configurando el valor a cero.
+*/
 void NODO_HM::emptyNodo() {
     this->key.clear();
     this->value = 0;
@@ -36,7 +85,14 @@ void NODO_HM::emptyNodo() {
 }
 
 
-//CONSTRUCTORES DE HASHMAP
+/*
+* Nombre de la función: HASHMAP.
+* Tipo de función: Constructor.
+* Parámetros: “_size” de tipo unsigned.
+* Dato de retorno: No tiene retorno.
+* Descripción de la función: Constructor que inicializa un HashMap con un tamaño
+* especificado o predetermido y llena el arreglo de nodos con valores vacíos.
+*/
 HASHMAP::HASHMAP(const unsigned _size) : size(_size), ocupado(0.0) {
     nodohashmap = new NODO_HM*[this->size];
     for (int i = 0; i < this->size; ++i) {
@@ -52,7 +108,14 @@ HASHMAP::HASHMAP() : size(INICIAL_SIZE_HASHMAP10), ocupado(0.0) {
     }
 }
 
-//DESTRUCTOR
+/*
+* Nombre de la función: ~HASHMAP.
+* Tipo de función: Destructor.
+* Parámetros: No recibe parámetros.
+* Dato de retorno: No tiene retorno.
+* Descripción de la función: Destructor que libera la memoria ocupada por los nodos
+* del HashMap.
+*/
 HASHMAP::~HASHMAP() {
     for (int i = 0; i < size; ++i) {
         delete nodohashmap[i];  // Libera cada objeto NODO_HM
@@ -60,7 +123,15 @@ HASHMAP::~HASHMAP() {
     delete[] nodohashmap;  // Libera el arreglo de punteros
 }
 
-//Funcion Hash
+
+/*
+* Nombre de la función: funcion_hash.
+* Tipo de función: unsigned.
+* Parámetros: “key” de tipo const std::string &.
+* Dato de retorno: Un entero sin signo que representa el índice del hash.
+* Descripción de la función: Calcula un índice único para una clave utilizando un
+* algoritmo de hashing basado en números primos.
+*/
 unsigned HASHMAP::funcion_hash( const std::string&  key) const {
     size_t hash = 0;
 
@@ -71,6 +142,14 @@ unsigned HASHMAP::funcion_hash( const std::string&  key) const {
     return hash;
 }
 
+/*
+* Nombre de la función: getPrintNodo.
+* Tipo de función: void.
+* Parámetros: “key” de tipo const std::string &.
+* Dato de retorno: No tiene retorno.
+* Descripción de la función: Imprime los datos del nodo asociado a la clave
+* proporcionada si este existe en el HashMap.
+*/
 void HASHMAP::getPrintNodo(const std::string &key) const {
     const unsigned hashindex = funcion_hash(key);
     const NODO_HM *nodo = this->nodohashmap[hashindex];
@@ -87,7 +166,14 @@ void HASHMAP::getPrintNodo(const std::string &key) const {
 
 
 
-//Metodo de insertar
+/*
+* Nombre de la función: insertar.
+* Tipo de función: void.
+* Parámetros: “value” de tipo int, “key” de tipo const std::string &.
+* Dato de retorno: No tiene retorno.
+* Descripción de la función: Inserta un par clave-valor en el HashMap. Si ocurre
+* una colisión, agrega el nuevo nodo al final de la lista enlazada.
+*/
 void HASHMAP::insertar(const int value, const std::string& key) {
 
     const unsigned hashindex = funcion_hash(key);
@@ -135,6 +221,14 @@ void HASHMAP::insertar(const int value, const std::string& key) {
 
 }
 
+/*
+* Nombre de la función: eliminar.
+* Tipo de función: bool.
+* Parámetros: “key” de tipo const std::string &.
+* Dato de retorno: true si el nodo fue eliminado, false en caso contrario.
+* Descripción de la función: Elimina el nodo asociado a la clave del HashMap.
+* Maneja casos de colisiones y ajusta los enlaces entre nodos.
+*/
 bool HASHMAP::eliminar(const std::string &key) const {
 
     const unsigned hashindex = funcion_hash(key);
@@ -164,7 +258,14 @@ bool HASHMAP::eliminar(const std::string &key) const {
     return true;
 }
 
-
+/*
+* Nombre de la función: getValue.
+* Tipo de función: int.
+* Parámetros: “key” de tipo const std::string &.
+* Dato de retorno: Un entero que representa el valor asociado a la clave.
+* Descripción de la función: Busca un nodo por su clave en el HashMap y retorna
+* su valor.
+*/
 int HASHMAP::getValue(const std::string &key) const {
 
     int value;
@@ -182,7 +283,14 @@ int HASHMAP::getValue(const std::string &key) const {
     return value;
 }
 
-//Redimenciona el tamaño
+/*
+* Nombre de la función: resize.
+* Tipo de función: void.
+* Parámetros: No recibe parámetros.
+* Dato de retorno: No tiene retorno.
+* Descripción de la función: Incrementa el tamaño del HashMap y realiza el rehashing
+* de todos los elementos para ajustar las posiciones.
+*/
 void HASHMAP::resize() {
     // Guardar el tamaño actual
     unsigned oldSize = size;
@@ -232,6 +340,14 @@ void HASHMAP::resize() {
     ocupado = static_cast<double>(oldSize) / size;
 }
 
+/*
+* Nombre de la función: serializarNODO.
+* Tipo de función: std::string.
+* Parámetros: “valorHash” de tipo unsigned.
+* Dato de retorno: Una cadena que representa la serialización del nodo.
+* Descripción de la función: Serializa el nodo en un formato que incluye su índice
+* y los pares clave-valor, manejando listas enlazadas en caso de colisiones.
+*/
 std::string HASHMAP::serializarNODO(const unsigned valorHash) const {
     std::ostringstream oss;
     auto current = this->nodohashmap[valorHash];
@@ -255,7 +371,14 @@ std::string HASHMAP::serializarNODO(const unsigned valorHash) const {
     return oss.str();
 }
 
-
+/*
+* Nombre de la función: guardar_HASHMAP.
+* Tipo de función: void.
+* Parámetros: “nombreArchivo” de tipo const std::string &.
+* Dato de retorno: No tiene retorno.
+* Descripción de la función: Guarda el contenido del HashMap en un archivo en formato
+* texto utilizando la serialización de nodos.
+*/
 void HASHMAP::guardar_HASHMAP(const std::string& nombreArchivo) const {
     FILE *archivo = fopen(nombreArchivo.c_str(), "w");
 
@@ -279,6 +402,15 @@ void HASHMAP::guardar_HASHMAP(const std::string& nombreArchivo) const {
     // Cerrar el archivo
     fclose(archivo);
 }
+
+/*
+* Nombre de la función: cargar_HASHMAP.
+* Tipo de función: HASHMAP.
+* Parámetros: “nombreArchivo” de tipo const std::string &.
+* Dato de retorno: Un objeto HASHMAP cargado desde el archivo.
+* Descripción de la función: Carga un HashMap desde un archivo en formato texto,
+* reconstruyendo los pares clave-valor y manejando las colisiones.
+*/
 HASHMAP HASHMAP::cargar_HASHMAP(const std::string& nombreArchivo) {
     HASHMAP hashmapCargado;  // Creamos un nuevo objeto HASHMAP vacío
 

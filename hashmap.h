@@ -17,13 +17,16 @@
 #ifndef HASHMAP_H
 #define HASHMAP_H
 
+//librerias standar usadas
 #include <string>
 
+//Constantes usadas en el programa
 #define INICIAL_SIZE_HASHMAP10 11
 #define LOAD_FACTOR 0.70
 #define INCREMENTATION_HASHMAP 17
 
 
+//Estructura nodo
 struct NODO_HM{
 
     int value = 0;
@@ -39,6 +42,8 @@ struct NODO_HM{
 
 };
 
+//Estructura HashMap
+//Contiene a NODO_HM
 struct HASHMAP {
     unsigned size;
     NODO_HM **nodohashmap;
